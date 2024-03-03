@@ -32,11 +32,34 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+//Group Admin Middleware
 Route::middleware(['auth','role:admin'])->group(function(){ //Check Login? and Role is Admin?
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
-}); //End Group Admin Middleware
 
+    //Show Admin Dashboard
+    Route::get('/admin/dashboard', [AdminController::class, 'admin_dashboard'])->name('admin.admin_dashboard');
+
+    //Admin Logout
+    Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout'); //->name ตังชื่อ route สำหรับไปใช้กับ tag ahref {{route('name')}}
+
+    //Show Edit Profile Admin
+    Route::get('/admin/profile', [AdminController::class, 'admin_profile'])->name('admin.profile');
+
+    //Update Admin Profile
+    Route::post('/admin/profile.store', [AdminController::class, 'admin_profile_store'])->name('admin.profile.store');
+
+    //Show Change Password Page
+    Route::get('admin/change/password', [AdminController::class, 'admin_change_password'])->name('admin.change.password');
+
+    //Update Admin Password
+    Route::post('admin/update/password', [AdminController::class, 'admin_update_password'])->name('admin.update.password');
+});
+
+
+//Group Agent Middleware
 Route::middleware(['auth','role:agent'])->group(function(){ //Check Login? and Role is Agent?
-Route::get('/agent/dashboard', [AgentController::class, 'index'])->name('agent.index');
-});//End Group Agent Middleware
- 
+Route::get('/agent/dashboard', [AgentController::class, 'agent_dashboard'])->name('agent.agent_dashboard');
+});
+
+
+//Show Admin Login Form
+Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin.login');
